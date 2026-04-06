@@ -84,24 +84,22 @@ export default function EventDetailPage() {
   }
 
   async function fetchPetStats() {
-    // Get pet stats for this event
-    const { data: pets } = await supabase
-      .from('registration_pets')
-      .select(`
-        pet:pets(species, sex),
-        registration:registrations!inner(event_id)
-      `)
-      .eq('registration.event_id', eventId)
+  const { data: pets } = await supabase
+    .from('registration_pets')
+    .select(`
+      pets (species, sex),
+      registrations!inner (event_id)
+    `)
+    .eq('registrations.event_id', eventId)
 
-    if (pets) {
-      const dogs = pets.filter(p => p.pet?.species === 'dog').length
-      const cats = pets.filter(p => p.pet?.species === 'cat').length
-      const male = pets.filter(p => p.pet?.sex === 'male').length
-      const female = pets.filter(p => p.pet?.sex === 'female').length
-
-      setStats({ dogs, cats, male, female })
-    }
+  if (pets) {
+    const dogs = pets.filter((p: any) => p.pets?.species === 'dog').length
+    const cats = pets.filter((p: any) => p.pets?.species === 'cat').length
+    const male = pets.filter((p: any) => p.pets?.sex === 'male').length
+    const female = pets.filter((p: any) => p.pets?.sex === 'female').length
+    setStats({ dogs, cats, male, female })
   }
+}
 
   if (loading || !event) {
     return (
